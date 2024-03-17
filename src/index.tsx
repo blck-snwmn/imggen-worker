@@ -1,7 +1,7 @@
 import { Resvg, initWasm } from "@resvg/resvg-wasm";
 import { Parser, jaModel } from "budoux";
 import { Hono } from "hono";
-import React from "react";
+import type React from "react";
 import satori from "satori";
 import resvgWasm from "./vendor/resvg.wasm";
 
@@ -81,6 +81,7 @@ const Component: React.FC<ComponentProps> = ({ iconUrl, text }) => {
 	const words = parser.parse(text);
 	console.log(words);
 	const spans = words.map((word, i) => {
+		// biome-ignore lint/suspicious/noArrayIndexKey: show elements in a table
 		return <span key={i}>{word}</span>;
 	});
 	return (
