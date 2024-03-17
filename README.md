@@ -9,6 +9,5 @@ wrangler dev
 wrangler deploy
 ```
 
-
 # Size
-[WARNING] 3012.37 KiB / gzip: 1116.76 KiB
+[WARNING] 32984.88 KiB / gzip: 1107.32 KiB
