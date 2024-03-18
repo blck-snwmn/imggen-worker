@@ -5,8 +5,10 @@ import React from "react";
 import satori from "satori";
 import resvgWasm from "./vendor/resvg.wasm";
 
+// initialize budoux parser
 const parser = new Parser(jaModel);
 
+// initialize resvg
 await initWasm(resvgWasm);
 
 const app = new Hono();
