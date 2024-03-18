@@ -4,6 +4,8 @@ import { Hono } from "hono";
 import React from "react";
 import satori from "satori";
 import resvgWasm from "./vendor/resvg.wasm";
+import { z } from 'zod'
+import { zValidator } from '@hono/zod-validator'
 
 // initialize budoux parser
 const parser = new Parser(jaModel);
@@ -11,18 +13,23 @@ const parser = new Parser(jaModel);
 // initialize resvg
 await initWasm(resvgWasm);
 
+// initialize zod schema
+const schema = z.object({
+	icon: z.string().url(),
+	text: z.string().min(1).max(100),
+})
+
 const app = new Hono();
 
-app.get("/image", async (c) => {
+app.get("/image", zValidator("query", schema), async (c) => {
 	const fontData = await getGoogleFont();
 
-	const dummyText =
-		"猫が犬と一緒に公園で絵を描いていた。その絵は宇宙飛行士になりたいバナナの夢を表現していた。するとバナナは突然踊り出し、猫と犬は驚いて逃げ出した。翌日、猫と犬がバナナを探しに行くと、バナナはすでに旅に出発していた。猫とバナナが一緒にスーパーマーケットに行った。バナナは牛乳を買うつもりだったが、猫が魚を買うことを提案した。そこで、二人は魚を買うために海に向かった。海に着くと、猫はサーフィンを始めた。バナナは砂浜で日光浴をしながら、哲学について考えていた。その後、二人はピザを食べに行くことにした。しかし、ピザ屋に着くと、店はすでに閉まっていた。がっかりした猫とバナナは、代わりに公園に行き、星空を見ながらギターを弾いた。";
+	const { icon, text } = c.req.valid('query')
 
 	const svg = await satori(
 		<Component
-			text={dummyText}
-			iconUrl="https://avatars.githubusercontent.com/u/44711725?v=4"
+			text={text}
+			iconUrl={icon}
 		/>,
 		{
 			width: 1200,
