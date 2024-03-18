@@ -22,10 +22,9 @@ const schema = z.object({
 const app = new Hono();
 
 app.get("/image", zValidator("query", schema), async (c) => {
-	const fontData = await getGoogleFont();
-
 	const { icon, text } = c.req.valid('query')
 
+	const fontData = await getGoogleFont();
 	const svg = await satori(
 		<Component
 			text={text}
